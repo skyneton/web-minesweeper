@@ -83,7 +83,7 @@ body {
 }
 
 *[shake] {
-  animation: shake .5s;
+  animation: shake .5s infinite;
 }
 
 @keyframes shake {

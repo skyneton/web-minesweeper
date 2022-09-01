@@ -10,6 +10,7 @@ const Mine = new class {
     #isPlaying = true;
     #shakeTimeout;
     #mineList;
+    #hiddenSize;
     constructor() {
         this.#tableWidth = 50;
         this.#tableElement = getClass("mine_table");
@@ -23,6 +24,7 @@ const Mine = new class {
         this.#mineCreated = false;
         this.#isPlaying = true;
         this.#mineList = [];
+        this.#hiddenSize = this.#tableWidth ** 2
     }
     
     #createDrawTable() {
@@ -65,8 +67,8 @@ const Mine = new class {
         if(this.#elementsTable[y][x].hasAttribute("val")) return;
         if(!this.#mineCreated) {
             const checked = [];
-            for(let cY = y - 2; cY <= y + 2; cY++) {
-                for(let cX = x - 2; cX <= x + 2; cX++)
+            for(let cY = y - 3; cY <= y + 3; cY++) {
+                for(let cX = x - 3; cX <= x + 3; cX++)
                     checked.push(`[${cX},${cY}]`);
             }
             this.#createMine(checked);
@@ -92,6 +94,10 @@ const Mine = new class {
             this.#showItem(x + 1, y - 1, checked);
             this.#showItem(x - 1, y + 1, checked);
             this.#showItem(x + 1, y + 1, checked);
+        }
+        if(--this.#hiddenSize <= 0) {
+            this.#gameClose();
+            alert("Game Clear!");
         }
     }
     
@@ -143,7 +149,7 @@ const Mine = new class {
         const mineCount = Math.floor((this.#tableWidth ** 2) * (Math.random() * .06 + .16));
         const getRandomPos = () => Math.round(Math.random() * (this.#tableWidth - 1));
         let i = 0;
-        while(i < mineCount) {
+        while(i < mineCount && this.#hiddenSize - checked.length > 0) {
             const y = getRandomPos(), x = getRandomPos();
             if(this.#gameTable[y][x] == -1 || checked.includes(`[${x},${y}]`)) continue;
             //this.#gameTable[y][x] ??= 0;
@@ -154,6 +160,7 @@ const Mine = new class {
             this.#mineInfoUpdate(x, y);
             i++;
         }
+        this.#hiddenSize -= this.#mineList.length;
     }
 
     #mineInfoUpdate(x, y) {
