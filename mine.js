@@ -24,7 +24,7 @@ const Mine = new class {
         this.#mineCreated = false;
         this.#isPlaying = true;
         this.#mineList = [];
-        this.#hiddenSize = this.#tableWidth ** 2
+        this.#hiddenSize = this.#tableWidth ** 2;
     }
     
     #createDrawTable() {
@@ -58,10 +58,8 @@ const Mine = new class {
     }
 
     #itemClick = (x, y) => e => {
-        //document.body.innerHTML += "$$$$"
         if(!this.#isPlaying) {
           this.#reset();
-          //document.body.innerHTML += "!@#$"
           return;
         }
         if(this.#elementsTable[y][x].hasAttribute("val")) return;
@@ -77,7 +75,6 @@ const Mine = new class {
         this.#tableElement.setAttribute("shake", true);
         this.#tableShakeDisable();
         
-       // document.body.innerHTML += this.#gameTable[y][x] == -1;
         if(this.#gameTable[y][x] == -1)
             this.#gameClose();
     }
